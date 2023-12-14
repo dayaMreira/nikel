@@ -3,6 +3,34 @@ let logged = sessionStorage.getItem("logged");
 const session = localStorage.getItem("session");
 
 //Logar
+document.getElementById("login-form").addEventListener("submit", function (e){
+    e.preventDefault();
+
+    const email = document.getElementById("email-input").value;
+    const password = document.getElementById("password-input").value;
+    const checkSession = document.getElementById("session-check").checked;
+
+    const conta = getAccount(email);
+
+    if (!conta){
+        alert("Ops! verifique o usuário ou a senha.");
+        return;
+    }
+
+    if(conta){
+        if(conta.password !== password){
+            alert("Ops! verifique o usuário ou a senha.");
+            return;  
+        }
+
+        saveSession(email, checkSession);
+
+
+        window.location.href = "home.html";
+    }
+    
+});
+
 document.getElementById("create-form").addEventListener("submit", function(e){
     e.preventDefault();
 
@@ -38,16 +66,19 @@ document.getElementById("create-form").addEventListener("submit", function(e){
 
 
 function checkLogged() {
+    const session = localStorage.getItem("session");
+
     if(session){
         sessionStorage.setItem("logged", session);
         logged = session;
     }
-
+    
     if(logged){
         saveSession(logged, session);
 
         window.location.href = "home.html";
     }
+    
 }
 
 function saveAccount(data) {
